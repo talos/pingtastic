@@ -17,10 +17,13 @@ class Problem(object):
     def __init__(self, url, elapsed_time, response=None, exception=None):
         self.url = url
         self.elapsed_time = elapsed_time
-        if response:
+        if response is not None:
             self.explanation = "Status code %s" % response.status_code
-        elif exception:
+        elif exception is not None:
             self.explanation = "Exception %s" % str(exception)
+        else:
+            raise Exception("Missing response and exception")
+
 
     def __str__(self):
         return "%s failed because of %s after %s seconds" % (self.url,
@@ -78,6 +81,7 @@ if __name__ == '__main__':
     errs = []
 
     for url in urls:
+        url = url.rstrip()
         (response, exception) = (None, None)
         try:
             start_time = time.time()
